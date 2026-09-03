@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { PublicHeader } from "@/components/header";
+import { PublicHeader } from "@/components/public-header";
 import { AuthForm, FormField } from "@/components/forms";
 import { signupAction } from "@/lib/actions";
 import { getSession } from "@/lib/session";
