@@ -31,7 +31,7 @@
     "zod": "^4.5.4"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.6",
+    "@types/bcryptjs": "^3.0.0",
     "@types/node": "^20",
     "@types/pg": "^8.23.1",
     "@types/qrcode": "^1.5.6",
