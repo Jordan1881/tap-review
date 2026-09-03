@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { PublicHeader } from "@/components/public-header";
 import { AuthForm, FormField } from "@/components/forms";
 import { loginAction } from "@/lib/actions";
-import { getSession } from "@/lib/session";
+import { requireUser } from "@/lib/auth";
 import { isSignupEnabled } from "@/lib/env";
 import { isSafeAppPath } from "@/lib/paths";
 
@@ -12,8 +12,8 @@ export default async function LoginPage({
 }: {
   searchParams: Promise<{ next?: string }>;
 }) {
-  const session = await getSession();
-  if (session) redirect("/app");
+  const user = await requireUser();
+  if (user) redirect("/app");
 
   const { next } = await searchParams;
   const safeNext = isSafeAppPath(next) ? next : "";
