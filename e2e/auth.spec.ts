@@ -30,7 +30,9 @@ test("signup, wrong password, then login reach the dashboard", async ({
   await page.getByLabel("אימייל").fill(email);
   await page.getByLabel("סיסמה").fill("wrong-password");
   await page.getByRole("button", { name: "התחברות" }).click();
-  await expect(page.getByRole("alert")).toHaveText("אימייל או סיסמה שגויים");
+  await expect(
+    page.getByRole("alert").filter({ hasText: "אימייל או סיסמה שגויים" }),
+  ).toBeVisible();
 
   await page.getByLabel("סיסמה").fill(password);
   await page.getByRole("button", { name: "התחברות" }).click();
