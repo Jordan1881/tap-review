@@ -13,8 +13,15 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    open-pull-requests-limit: 5
     groups:
-      npm-minor-and-patch:
+      production-minor-and-patch:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+      development-minor-and-patch:
+        dependency-type: development
         update-types:
           - minor
           - patch

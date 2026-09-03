@@ -97,11 +97,9 @@ prisma/schema.prisma    # User, Location, Tap models
 
 ## CI/CD
 
-GitHub Actions (`.github/workflows/ci.yml`) runs **lint**, **test**, and **build** on every pull request and every push to `main`. The workflow sets dummy `SESSION_SECRET`, `DATABASE_URL`, and `NEXT_PUBLIC_APP_URL` values so production env assertions pass; they are not real secrets.
+GitHub Actions (`.github/workflows/ci.yml`) runs **lint**, **test**, and **build** on every pull request and every push to `main`. Dummy `SESSION_SECRET`, `DATABASE_URL`, and `NEXT_PUBLIC_APP_URL` values exist only so production env assertions pass at build time; they are not real secrets. CI does not start Postgres or run migrations.
 
-Railway deploys from `main` via the GitHub integration after CI passes. Actions does not run `railway up`, so the pipeline will not double-deploy.
-
-Protect `main` by requiring the `ci` status check (shown as **CI / ci**) before merge.
+Railway deploys from `main` via the GitHub integration when `main` is pushed. That deploy is independent of Actions unless you turn on Railway Wait-for-CI (or require the **CI / ci** check before merge). Actions does not run `railway up`, so the pipeline will not double-deploy.
 
 ## License
 
