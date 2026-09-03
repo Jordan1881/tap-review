@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
-import { destroySession, getSession } from "@/lib/session";
+import { getSession } from "@/lib/session";
 
 export { createSession, destroySession, getSession } from "@/lib/session";
 export type { SessionPayload } from "@/lib/session";
@@ -25,10 +25,7 @@ export async function requireUser() {
     select: { id: true, email: true, name: true, createdAt: true },
   });
 
-  if (!user) {
-    await destroySession();
-    return null;
-  }
-
+  // Cookie writes are invalid during RSC render. Orphan JWTs are
+  // overwritten on login or cleared by POST/GET /logout.
   return user;
 }
