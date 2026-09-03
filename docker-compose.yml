@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: tapreview
+      POSTGRES_PASSWORD: tapreview
+      POSTGRES_DB: tapreview
+    ports:
+      - "5432:5432"
+    volumes:
+      - tapreview_pg:/var/lib/postgresql/data
+
+volumes:
+  tapreview_pg:
