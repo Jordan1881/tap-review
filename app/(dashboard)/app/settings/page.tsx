@@ -11,12 +11,14 @@ export default function SettingsPage() {
           label="סיסמה נוכחית"
           name="currentPassword"
           type="password"
+          autoComplete="current-password"
         />
         <FormField
           label="סיסמה חדשה"
           name="newPassword"
           type="password"
           helpText="לפחות 8 תווים"
+          autoComplete="new-password"
         />
       </AuthForm>
     </div>

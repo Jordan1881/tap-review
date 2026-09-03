@@ -30,5 +30,11 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "tapreview-nfc-google-reviews"]
+  "exclude": [
+    "node_modules",
+    "tapreview-nfc-google-reviews",
+    "**/*.test.ts",
+    "e2e",
+    "playwright.config.ts"
+  ]
 }
