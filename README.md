@@ -95,6 +95,14 @@ prisma/schema.prisma    # User, Location, Tap models
 - Run `npx prisma migrate deploy` on deploy (already part of `npm start`)
 - Optional: `SIGNUP_ENABLED=false` after the first owner account exists
 
+## CI/CD
+
+GitHub Actions (`.github/workflows/ci.yml`) runs **lint**, **test**, and **build** on every pull request and every push to `main`. The workflow sets dummy `SESSION_SECRET`, `DATABASE_URL`, and `NEXT_PUBLIC_APP_URL` values so production env assertions pass; they are not real secrets.
+
+Railway deploys from `main` via the GitHub integration after CI passes. Actions does not run `railway up`, so the pipeline will not double-deploy.
+
+Protect `main` by requiring the `ci` status check (shown as **CI / ci**) before merge.
+
 ## License
 
 Private — built for Yarden Biton
