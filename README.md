@@ -97,7 +97,17 @@ prisma/schema.prisma    # User, Location, Tap models
 
 ## CI/CD
 
-GitHub Actions (`.github/workflows/ci.yml`) runs **lint**, **test**, and **build** on every pull request and every push to `main`. Dummy `SESSION_SECRET`, `DATABASE_URL`, and `NEXT_PUBLIC_APP_URL` values exist only so production env assertions pass at build time; they are not real secrets. CI does not start Postgres or run migrations.
+GitHub Actions (`.github/workflows/ci.yml`) is the product-health gate on every pull request and every push to `main`. The job named **ci** (required on `main`) runs:
+
+1. **Lint**
+2. **Unit tests** (`npm test`) — auth, login error cases, env, `/health` success and 503, tap funnel, validation
+3. **Postgres** (service container) + `prisma migrate deploy`
+4. **Production build**
+5. **Playwright E2E** — `/health` 200 against a live server, unknown tap slug 404, `/app` requires login, signup / wrong password / login
+
+Dummy `SESSION_SECRET` / `NEXT_PUBLIC_APP_URL` values exist only for CI; they are not real secrets. `DATABASE_URL` points at the Actions Postgres service.
+
+Local E2E: `docker compose up -d` then `npm run build && npx playwright install chromium && npm run test:e2e`.
 
 Railway deploys from `main` via the GitHub integration when `main` is pushed. That deploy is independent of Actions unless you turn on Railway Wait-for-CI (or require the **CI / ci** check before merge). Actions does not run `railway up`, so the pipeline will not double-deploy.
 

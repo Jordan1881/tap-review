@@ -54,6 +54,7 @@ export function FormField({
   required = true,
   placeholder,
   helpText,
+  autoComplete,
 }: {
   label: string;
   name: string;
@@ -61,6 +62,7 @@ export function FormField({
   required?: boolean;
   placeholder?: string;
   helpText?: string;
+  autoComplete?: string;
 }) {
   return (
     <div>
@@ -73,6 +75,8 @@ export function FormField({
         type={type}
         required={required}
         placeholder={placeholder}
+        autoComplete={autoComplete}
+        dir={type === "email" || type === "password" ? "ltr" : undefined}
         className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
       />
       {helpText && (

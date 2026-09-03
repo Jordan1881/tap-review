@@ -14,17 +14,31 @@ permissions:
   contents: read
 
 # Dummy values so production env assertions pass at build time.
-# CI does not start Postgres or run migrations; tests are unit-only.
+# Postgres below is the real CI database for migrate + E2E + /health.
 env:
   SESSION_SECRET: ci-session-secret-at-least-32-chars!!
   DATABASE_URL: postgresql://tapreview:tapreview@127.0.0.1:5432/tapreview
-  NEXT_PUBLIC_APP_URL: http://localhost:3000
+  NEXT_PUBLIC_APP_URL: http://127.0.0.1:3000
 
 jobs:
   ci:
     name: ci
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: tapreview
+          POSTGRES_PASSWORD: tapreview
+          POSTGRES_DB: tapreview
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U tapreview -d tapreview"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -44,8 +58,17 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Test
+      - name: Unit tests
         run: npm test
+
+      - name: Apply database migrations
+        run: npx prisma migrate deploy
 
       - name: Build
         run: npm run build
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: End-to-end and health checks
+        run: npm run test:e2e

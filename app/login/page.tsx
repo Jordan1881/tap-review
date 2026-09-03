@@ -26,8 +26,19 @@ export default async function LoginPage({
         <p className="mb-8 text-slate-600">היכנסו ללוח הבקרה שלכם</p>
         <AuthForm action={loginAction} submitLabel="התחברות">
           {safeNext ? <input type="hidden" name="next" value={safeNext} /> : null}
-          <FormField label="אימייל" name="email" type="email" placeholder="you@example.com" />
-          <FormField label="סיסמה" name="password" type="password" />
+          <FormField
+            label="אימייל"
+            name="email"
+            type="email"
+            placeholder="you@example.com"
+            autoComplete="username"
+          />
+          <FormField
+            label="סיסמה"
+            name="password"
+            type="password"
+            autoComplete="current-password"
+          />
         </AuthForm>
         {isSignupEnabled() ? (
           <p className="mt-6 text-center text-sm text-slate-600">

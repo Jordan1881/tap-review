@@ -13,6 +13,8 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
     "tapreview-nfc-google-reviews/**",
+    "playwright-report/**",
+    "test-results/**",
   ]),
 ]);
 

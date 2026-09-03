@@ -44,6 +44,18 @@ describe("loginSchema", () => {
       expect(result.data.email).toBe("a@b.com");
     }
   });
+
+  test("rejects a missing password so login cannot submit an empty secret", () => {
+    const result = loginSchema.safeParse({
+      email: "a@b.com",
+      password: "",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues[0]?.message).toBe("נא להזין סיסמה");
+    }
+  });
 });
 
 describe("changePasswordSchema", () => {

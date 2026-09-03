@@ -37,13 +37,20 @@ export default async function SignupPage() {
         <h1 className="mb-2 text-2xl font-bold text-slate-900">הרשמה</h1>
         <p className="mb-8 text-slate-600">צרו חשבון והתחילו לקבל ביקורות</p>
         <AuthForm action={signupAction} submitLabel="יצירת חשבון">
-          <FormField label="שם מלא" name="name" placeholder="ישראל ישראלי" />
-          <FormField label="אימייל" name="email" type="email" placeholder="you@example.com" />
+          <FormField label="שם מלא" name="name" placeholder="ישראל ישראלי" autoComplete="name" />
+          <FormField
+            label="אימייל"
+            name="email"
+            type="email"
+            placeholder="you@example.com"
+            autoComplete="username"
+          />
           <FormField
             label="סיסמה"
             name="password"
             type="password"
             helpText="לפחות 8 תווים"
+            autoComplete="new-password"
           />
         </AuthForm>
         <p className="mt-6 text-center text-sm text-slate-600">
