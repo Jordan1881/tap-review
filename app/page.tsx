@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PublicHeader } from "@/components/header";
+import { PublicHeader } from "@/components/public-header";
 
 export default function HomePage() {
   return (
