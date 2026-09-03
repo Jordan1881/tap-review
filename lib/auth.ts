@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
-import { getSession } from "@/lib/session";
+import { destroySession, getSession } from "@/lib/session";
 
 export { createSession, destroySession, getSession } from "@/lib/session";
 export type { SessionPayload } from "@/lib/session";
@@ -24,6 +24,11 @@ export async function requireUser() {
     where: { id: session.userId },
     select: { id: true, email: true, name: true, createdAt: true },
   });
+
+  if (!user) {
+    await destroySession();
+    return null;
+  }
 
   return user;
 }
