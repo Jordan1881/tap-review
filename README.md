@@ -27,7 +27,7 @@ npx prisma migrate dev
 npm run dev
 ```
 
-Open [http://localhost:43123](http://localhost:43123)
+Open [http://localhost:3000](http://localhost:3000)
 
 ## Environment variables
 
@@ -36,7 +36,7 @@ Copy `.env.example` to `.env`:
 | Variable | Description |
 |----------|-------------|
 | `DATABASE_URL` | SQLite path for local dev (`file:./dev.db`). Point at Postgres in production. |
-| `NEXT_PUBLIC_APP_URL` | Public base URL for short links and QR codes (e.g. `http://localhost:43123`) |
+| `NEXT_PUBLIC_APP_URL` | Public base URL for short links and QR codes (e.g. `http://localhost:3000`) |
 | `SESSION_SECRET` | Secret for signing session cookies. Generate with `openssl rand -base64 32` |
 
 ## NFC encoding
