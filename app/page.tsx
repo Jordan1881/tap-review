@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PublicHeader } from "@/components/header";
+import { isSignupEnabled } from "@/lib/env";
 
 export default function HomePage() {
   return (
@@ -20,17 +21,19 @@ export default function HomePage() {
               סינון, בלי הבטחות מזויפות.
             </p>
             <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-              <Link
-                href="/signup"
-                className="w-full rounded-xl bg-primary px-8 py-4 text-lg font-semibold text-white hover:bg-primary-dark sm:w-auto"
-              >
-                התחילו בחינם
-              </Link>
+              {isSignupEnabled() ? (
+                <Link
+                  href="/signup"
+                  className="w-full rounded-xl bg-primary px-8 py-4 text-lg font-semibold text-white hover:bg-primary-dark sm:w-auto"
+                >
+                  התחילו בחינם
+                </Link>
+              ) : null}
               <Link
                 href="/login"
                 className="w-full rounded-xl border border-slate-300 bg-white px-8 py-4 text-lg font-medium text-slate-700 hover:bg-slate-50 sm:w-auto"
               >
-                כבר יש לי חשבון
+                {isSignupEnabled() ? "כבר יש לי חשבון" : "כניסה ללוח הבקרה"}
               </Link>
             </div>
           </div>

@@ -4,10 +4,31 @@ import { PublicHeader } from "@/components/header";
 import { AuthForm, FormField } from "@/components/forms";
 import { signupAction } from "@/lib/actions";
 import { getSession } from "@/lib/session";
+import { isSignupEnabled } from "@/lib/env";
 
 export default async function SignupPage() {
   const session = await getSession();
   if (session) redirect("/app");
+
+  if (!isSignupEnabled()) {
+    return (
+      <div className="flex min-h-screen flex-col">
+        <PublicHeader />
+        <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-4 py-12 text-center">
+          <h1 className="mb-2 text-2xl font-bold text-slate-900">ההרשמה סגורה</h1>
+          <p className="mb-8 text-slate-600">
+            כרגע לא ניתן ליצור חשבון חדש. אם כבר יש לכם חשבון, התחברו.
+          </p>
+          <Link
+            href="/login"
+            className="rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white hover:bg-primary-dark"
+          >
+            התחברות
+          </Link>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen flex-col">

@@ -1,13 +1,16 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import { MIN_SESSION_SECRET_LENGTH } from "@/lib/env";
 
 const SESSION_COOKIE = "tapreview_session";
 const SESSION_DURATION = 60 * 60 * 24 * 30; // 30 days
 
 function getSessionSecret() {
   const secret = process.env.SESSION_SECRET;
-  if (!secret || secret.length < 16) {
-    throw new Error("SESSION_SECRET must be set and at least 16 characters");
+  if (!secret || secret.length < MIN_SESSION_SECRET_LENGTH) {
+    throw new Error(
+      `SESSION_SECRET must be set and at least ${MIN_SESSION_SECRET_LENGTH} characters`
+    );
   }
   return new TextEncoder().encode(secret);
 }

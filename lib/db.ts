@@ -1,30 +1,23 @@
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 import { PrismaClient } from "@/app/generated/prisma/client";
 import pg from "pg";
-import path from "path";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-function resolveSqlitePath(dbUrl: string): string {
-  const dbPath = dbUrl.replace(/^file:/, "");
-  if (path.isAbsolute(dbPath)) return dbPath;
-  return path.join(process.cwd(), dbPath.replace(/^\.\//, ""));
-}
-
 function createPrismaClient() {
-  const dbUrl = process.env.DATABASE_URL ?? "file:./dev.db";
-
-  if (dbUrl.startsWith("postgres://") || dbUrl.startsWith("postgresql://")) {
-    const pool = new pg.Pool({ connectionString: dbUrl });
-    const adapter = new PrismaPg(pool);
-    return new PrismaClient({ adapter });
+  const dbUrl = process.env.DATABASE_URL;
+  if (!dbUrl || !(dbUrl.startsWith("postgres://") || dbUrl.startsWith("postgresql://"))) {
+    throw new Error("DATABASE_URL must be a postgresql:// connection string");
   }
 
-  const resolvedPath = resolveSqlitePath(dbUrl);
-  const adapter = new PrismaBetterSqlite3({ url: resolvedPath });
+  const pool = new pg.Pool({
+    connectionString: dbUrl,
+    max: 10,
+    connectionTimeoutMillis: 5_000,
+  });
+  const adapter = new PrismaPg(pool);
   return new PrismaClient({ adapter });
 }
 

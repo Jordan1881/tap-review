@@ -33,6 +33,14 @@ export function LocationForm({
           {state.error}
         </div>
       )}
+      {state.success && (
+        <div
+          role="status"
+          className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800"
+        >
+          {state.success}
+        </div>
+      )}
 
       <div>
         <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-slate-700">

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/auth";
 import { logoutAction } from "@/lib/actions";
+import { isSignupEnabled } from "@/lib/env";
 
 export async function AppHeader() {
   const user = await requireUser();
@@ -16,6 +17,12 @@ export async function AppHeader() {
             <span className="hidden text-sm text-slate-600 sm:inline">
               שלום, {user.name}
             </span>
+            <Link
+              href="/app/settings"
+              className="rounded-lg px-3 py-2 text-sm text-slate-600 hover:bg-slate-100"
+            >
+              הגדרות
+            </Link>
             <form action={logoutAction}>
               <button
                 type="submit"
@@ -32,6 +39,8 @@ export async function AppHeader() {
 }
 
 export function PublicHeader() {
+  const signupEnabled = isSignupEnabled();
+
   return (
     <header className="border-b border-slate-200 bg-white">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
@@ -45,12 +54,14 @@ export function PublicHeader() {
           >
             התחברות
           </Link>
-          <Link
-            href="/signup"
-            className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark"
-          >
-            הרשמה
-          </Link>
+          {signupEnabled ? (
+            <Link
+              href="/signup"
+              className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark"
+            >
+              הרשמה
+            </Link>
+          ) : null}
         </nav>
       </div>
     </header>

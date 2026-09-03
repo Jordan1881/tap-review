@@ -2,12 +2,17 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { requireUser } from "@/lib/auth";
-import { updateLocationAction } from "@/lib/actions";
+import {
+  deleteLocationAction,
+  regenerateSlugAction,
+  updateLocationAction,
+} from "@/lib/actions";
 import { getShortUrl, getGoogleReviewUrl } from "@/lib/slug";
 import { generateQrDataUrl } from "@/lib/qr";
 import { LocationForm } from "@/components/location-form";
 import { CardPreview } from "@/components/card-preview";
 import { CopyButton } from "@/components/copy-button";
+import { ConfirmForm } from "@/components/confirm-form";
 
 export default async function LocationDetailPage({
   params,
@@ -144,6 +149,28 @@ export default async function LocationDetailPage({
           defaultName={location.name}
           defaultPlaceId={location.placeId}
         />
+      </section>
+
+      <section className="mt-8 rounded-2xl border border-red-200 bg-red-50 p-6">
+        <h2 className="mb-2 text-lg font-bold text-red-900">פעולות מסוכנות</h2>
+        <p className="mb-5 text-sm text-red-800">
+          קישור חדש מבטל כרטיסי NFC ו-QR ישנים. מחיקה מסירה את המיקום ואת
+          היסטוריית ההקשות.
+        </p>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <ConfirmForm
+            action={regenerateSlugAction.bind(null, location.id)}
+            label="יצירת קישור חדש"
+            confirmMessage="כרטיסים וקודים ישנים יפסיקו לעבוד. ליצור קישור חדש?"
+            className="rounded-xl border border-red-300 bg-white px-4 py-3 text-sm font-medium text-red-800 hover:bg-red-100"
+          />
+          <ConfirmForm
+            action={deleteLocationAction.bind(null, location.id)}
+            label="מחיקת מיקום"
+            confirmMessage="למחוק את המיקום ואת כל ההקשות שלו? הפעולה לא ניתנת לביטול."
+            className="rounded-xl bg-red-700 px-4 py-3 text-sm font-medium text-white hover:bg-red-800"
+          />
+        </div>
       </section>
     </div>
   );
