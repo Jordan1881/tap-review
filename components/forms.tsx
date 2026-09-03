@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import type { ActionState } from "@/lib/actions";
+import { isSafeAppPath } from "@/lib/paths";
 
 type AuthFormProps = {
   action: (
@@ -16,6 +17,12 @@ const initialState: ActionState = {};
 
 export function AuthForm({ action, submitLabel, children }: AuthFormProps) {
   const [state, formAction, pending] = useActionState(action, initialState);
+
+  useEffect(() => {
+    if (state.redirectTo && isSafeAppPath(state.redirectTo)) {
+      window.location.assign(state.redirectTo);
+    }
+  }, [state.redirectTo]);
 
   return (
     <form action={formAction} className="space-y-4">

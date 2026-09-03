@@ -126,7 +126,7 @@ describe("loginAction error cases", () => {
 
     await expect(
       loginAction({}, loginForm({ email: "a@example.com", password: "password1" }))
-    ).rejects.toThrow("REDIRECT:/app");
+    ).resolves.toEqual({ redirectTo: "/app" });
 
     expect(createSession).toHaveBeenCalledWith("user_1", "a@example.com");
   });

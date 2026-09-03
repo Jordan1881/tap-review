@@ -34,7 +34,15 @@ test("signup, wrong password, then login reach the dashboard", async ({
     page.getByRole("alert").filter({ hasText: "אימייל או סיסמה שגויים" }),
   ).toBeVisible();
 
+  const form = page.locator("form").filter({ has: page.getByLabel("סיסמה") });
+  const submit = form.getByRole("button", { name: "התחברות" });
+  await expect(submit).toBeEnabled();
+  await expect(page.getByLabel("אימייל")).toBeEditable();
+  await expect(page.getByLabel("סיסמה")).toBeEditable();
+
+  // RSC refresh after the failed action can remount uncontrolled fields.
+  await page.getByLabel("אימייל").fill(email);
   await page.getByLabel("סיסמה").fill(password);
-  await page.getByRole("button", { name: "התחברות" }).click();
+  await submit.click();
   await expect(page).toHaveURL(/\/app$/);
 });

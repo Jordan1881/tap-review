@@ -32,6 +32,7 @@ import {
 export type ActionState = {
   error?: string;
   success?: string;
+  redirectTo?: string;
 };
 
 const prismaLocationRepo: LocationRepo = {
@@ -124,7 +125,9 @@ export async function loginAction(
 
   await createSession(user.id, user.email);
   const next = formData.get("next");
-  redirect(isSafeAppPath(next) ? next : "/app");
+  // Return a path instead of redirect(): useActionState already settled an
+  // error on this form, and a thrown NEXT_REDIRECT often never navigates.
+  return { redirectTo: isSafeAppPath(next) ? next : "/app" };
 }
 
 export async function logoutAction() {
