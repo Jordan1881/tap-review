@@ -1,8 +1,14 @@
 import { z } from "zod";
 
+const emailSchema = z
+  .string()
+  .trim()
+  .email("כתובת אימייל לא תקינה")
+  .transform((email) => email.toLowerCase());
+
 export const signupSchema = z.object({
   name: z.string().min(2, "השם חייב להכיל לפחות 2 תווים").max(100),
-  email: z.string().email("כתובת אימייל לא תקינה"),
+  email: emailSchema,
   password: z
     .string()
     .min(8, "הסיסמה חייבת להכיל לפחות 8 תווים")
@@ -10,8 +16,16 @@ export const signupSchema = z.object({
 });
 
 export const loginSchema = z.object({
-  email: z.string().email("כתובת אימייל לא תקינה"),
+  email: emailSchema,
   password: z.string().min(1, "נא להזין סיסמה"),
+});
+
+export const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1, "נא להזין את הסיסמה הנוכחית"),
+  newPassword: z
+    .string()
+    .min(8, "הסיסמה החדשה חייבת להכיל לפחות 8 תווים")
+    .max(100),
 });
 
 export const locationSchema = z.object({
